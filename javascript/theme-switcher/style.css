@@ -1,0 +1,66 @@
+:root {
+  --bg-primary: #ffffff;
+  --text-primary: #000000;
+  --bg-primary-accent: #87cefa;
+  --bg-secondary-accent: #b0e0e6;
+}
+
+html.dark {
+  --bg-primary: #000000;
+  --text-primary: #ffffff;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+ul,
+li {
+  margin: 0;
+}
+
+button {
+  background-color: var(--bg-primary-accent);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  padding-block: 8px;
+  padding-inline: 12px;
+}
+
+.nav {
+  background-color: var(--bg-primary-accent);
+  border-radius: 4px;
+  color: var(--text-primary);
+  padding-block: 8px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+}
+
+.nav-list {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  list-style: none;
+}
+
+.nav-list li {
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 8px 12px;
+
+  &:hover {
+    background-color: var(--bg-secondary-accent);
+    transition: background-color ease-out 200ms;
+  }
+}
+
+.theme-switcher {
+  margin: 0 auto;
+}
