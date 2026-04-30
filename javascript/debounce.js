@@ -1,5 +1,5 @@
 /**
- * Debounces the callback function
+ * Debounces the invocation of callback function for the given wait time.
  *
  * @param {(...args: Array<unknown>) => unknown} func
  * @param {number} wait
