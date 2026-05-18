@@ -1,0 +1,8 @@
+button {
+  margin-inline: 5px;
+}
+
+.pokemon-body-measurements {
+  display: flex;
+  gap: 1rem;
+}

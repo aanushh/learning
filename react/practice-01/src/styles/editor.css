@@ -1,0 +1,42 @@
+.bold {
+  font-weight: 800;
+}
+
+.italian {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.analyse {
+  text-transform: uppercase;
+}
+
+.editorcomp {
+  background-color: bisque;
+  padding-inline: 1rem;
+  padding-block-start: 0.1rem;
+  padding-block-end: 1rem;
+}
+
+.button button {
+  margin-inline: 0.5rem;
+  margin-block-end: 1rem;
+  padding: 4px 8px;
+
+  &:first-child {
+    margin-inline-start: 0;
+  }
+
+  &:last-child {
+    margin-inline-end: 0;
+  }
+}
+
+textarea {
+  padding: 4px;
+  width: 100%;
+  background-color: antiquewhite;
+}
