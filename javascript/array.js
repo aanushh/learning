@@ -32,14 +32,15 @@ const countFrequencyOfItems = (arr) => {
  * Recursively flattens the given array
  *
  * @param {Array<*|Array>} value
+ * @param {number} depth
  * @return {Array}
  */
-const flatten = (value) => {
+const flatten = (value, depth = 1) => {
   if (!Array.isArray(value)) {
-    return [value];
+    return value;
   }
 
   return value.reduce((acc, item) => {
-    return acc.concat(Array.isArray(item) ? flatten(item) : item);
+    return acc.concat(Array.isArray(item) && depth > 1 ? flatten(item) : item);
   }, []);
 };
