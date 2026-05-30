@@ -36,11 +36,11 @@ const countFrequencyOfItems = (arr) => {
  * @return {Array}
  */
 const flatten = (value, depth = 1) => {
-  if (!Array.isArray(value)) {
-    return value;
+  if (!Array.isArray(arr) || depth < 1) {
+    return arr;
   }
 
-  return value.reduce((acc, item) => {
-    return acc.concat(Array.isArray(item) && depth > 1 ? flatten(item) : item);
+  return arr.reduce((result, arrItem) => {
+    return result.concat(flatten(arrItem, depth - 1));
   }, []);
 };
