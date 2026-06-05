@@ -29,18 +29,49 @@ const countFrequencyOfItems = (arr) => {
 };
 
 /**
- * Recursively flattens the given array
+ * Recursively flattens the given array based on given depth
  *
- * @param {Array<*|Array>} value
+ * @param {Array<*|Array>} arr
  * @param {number} depth
  * @return {Array}
  */
-const flatten = (value, depth = 1) => {
+const flatten = (arr, depth = 1) => {
   if (!Array.isArray(arr) || depth < 1) {
     return arr;
   }
 
+  /**
+   * In case, reduce() should be avoided in
+   * any scenario, use forEach or for.
+   */
+
   return arr.reduce((result, arrItem) => {
     return result.concat(flatten(arrItem, depth - 1));
+  }, []);
+};
+
+/**
+ *
+ * @param {Array<*|Array>} arr
+ * @param {*} validator
+ */
+const filter = (arr, validator) => {
+  if (!Array.isArray(arr) || typeof validator !== "function") {
+    return [];
+  }
+
+  /**
+   * In case, reduce() should be avoided in
+   * any scenario, use forEach or for.
+   */
+
+  return arr.reduce((acc, item) => {
+    const shouldInclude = validator(item);
+
+    if (shouldInclude) {
+      acc.push(item);
+    }
+
+    return acc;
   }, []);
 };
