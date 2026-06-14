@@ -1,0 +1,40 @@
+body {
+  font-family: sans-serif;
+}
+
+.tab-panel-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tablist-wrapper {
+  display: flex;
+  gap: 1rem;
+}
+
+.tab {
+  border: 1px solid rgba(128, 128, 128, 0.192);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 300ms;
+}
+
+.tab--active {
+  background-color: blue;
+  color: skyblue;
+}
+
+.tab-panels-container {
+  margin-top: 1rem;
+}
+
+.tab-panel {
+  padding: 1rem;
+  border: 1px solid rgba(128, 128, 128, 0.274);
+  border-radius: 4px;
+}
