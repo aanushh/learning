@@ -1,0 +1,82 @@
+:root {
+  --color-black: #000;
+  --color-white: #fff;
+  --color-grey-94: #f0f0f0;
+  --color-grey-26: #424242;
+
+  --text-primary: var(--color-black);
+  --text-secondary: var(--color-white);
+  --bg-primary: var(--color-black);
+  --bg-secondary: var(--color-white);
+  --bg-accent-primary: var(--color-grey-94);
+  --bg-accent-secondary: var(--color-grey-26);
+
+  --motion-fast: 300ms;
+}
+
+body {
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  transition: background-color var(--motion-fast);
+}
+
+html[data-theme="dark"] {
+  body {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+
+  & .card {
+    background: var(--color-grey-26);
+    color: var(--color-white);
+  }
+}
+
+.card {
+  background: var(--bg-accent-primary);
+  color: var(--text-primary);
+  padding: 1rem;
+  margin: 1rem 0;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast),
+    color var(--motion-fast);
+
+  &:hover {
+    background-color: var(--color-grey-26);
+    color: var(--color-white);
+  }
+
+  &:focus-visible {
+    outline: 1px solid blue;
+  }
+}
+
+.theme-announcer {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  border: 0;
+  margin: -1px;
+  padding: 0;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    transition-duration: 0ms;
+    scroll-behavior: auto;
+  }
+}
