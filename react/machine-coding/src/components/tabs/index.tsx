@@ -1,4 +1,5 @@
 import { useState, forwardRef, useRef, type KeyboardEvent } from "react";
+import "./styles.css";
 
 interface Tab {
   id: string;
@@ -10,10 +11,38 @@ interface TabsProps {
   tabs: Tab[];
 }
 
-const Tabs = ({ tabs }: TabsProps) => {
-  const [activeTabId, setActiveTabId] = useState(tabs[0].id);
+interface TabListProps {
+  activeTabId: string;
+  onChangeActiveTab: (tabId: string) => void;
+  tabs: Tab[];
+}
 
-  const updateActiveTabId = (tabId: string) => {
+interface TabItemProps {
+  id: string;
+  isActive: boolean;
+  label: string;
+  panelId: string;
+  onClick: () => void;
+  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
+}
+
+interface TabPanelProps {
+  id: string;
+  content: string;
+  isActive: boolean;
+  tabId: string;
+}
+
+const Tabs = ({ tabs }: TabsProps) => {
+  const [activeTabId, setActiveTabId] = useState(() => {
+    if (!tabs.length) {
+      return "";
+    }
+
+    return tabs[0].id;
+  });
+
+  const onChangeActiveTab = (tabId: string) => {
     setActiveTabId(tabId);
   };
 
@@ -22,67 +51,86 @@ const Tabs = ({ tabs }: TabsProps) => {
       <TabList
         activeTabId={activeTabId}
         tabs={tabs}
-        updateActiveTabId={updateActiveTabId}
+        onChangeActiveTab={onChangeActiveTab}
       />
 
-      <TabPanelWrapper activeTabId={activeTabId} tabs={tabs} />
+      <div className="tabs-panel-wrapper">
+        {tabs.map(({ id, content }) => {
+          const tabId = `${id}-tab`;
+          const panelId = `${id}-panel`;
+
+          return (
+            <TabPanel
+              id={panelId}
+              key={panelId}
+              content={content}
+              isActive={activeTabId === id}
+              tabId={tabId}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
 
-interface TabListProps {
-  activeTabId: string;
-  tabs: Tab[];
-  updateActiveTabId: (tabId: string) => void;
-}
+const TabList = ({ activeTabId, onChangeActiveTab, tabs }: TabListProps) => {
+  const tabRefs = useRef<Map<string, HTMLButtonElement | null>>(new Map());
 
-const TabList = ({ activeTabId, tabs, updateActiveTabId }: TabListProps) => {
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const onFocusTab = (id: string) => {
+    const tabsMap = tabRefs.current;
+    const tabEl = tabsMap.get(id);
 
-  const moveFocus = (index: number) => {
-    tabRefs.current[index]?.focus();
+    tabEl?.focus();
+  };
+
+  const focusAndSelectTab = (tabId: string) => {
+    onFocusTab(tabId);
+    onChangeActiveTab(tabId);
   };
 
   const handleKeyDown = (
     event: KeyboardEvent<HTMLButtonElement>,
-    id: string,
+    position: number,
   ) => {
     const key = event.key;
     const lastElementIndex = tabs.length - 1;
 
     switch (key) {
       case "Home": {
-        const moveFocusTab = tabs[0];
-        moveFocus(0);
-        updateActiveTabId(moveFocusTab.id);
+        const nextTab = tabs[0];
+
+        event.preventDefault();
+        focusAndSelectTab(nextTab.id);
 
         break;
       }
 
       case "End": {
-        const moveFocusTab = tabs[lastElementIndex];
-        moveFocus(lastElementIndex);
-        updateActiveTabId(moveFocusTab.id);
+        const nextTab = tabs[lastElementIndex];
+
+        event.preventDefault();
+        focusAndSelectTab(nextTab.id);
 
         break;
       }
 
       case "ArrowRight": {
-        const currentTabIndex = tabs.findIndex((tab) => tab.id === id);
-        const moveTabIndex =
-          currentTabIndex === lastElementIndex ? 0 : currentTabIndex + 1;
-        moveFocus(moveTabIndex);
-        updateActiveTabId(tabs[moveTabIndex].id);
+        const nextTabIndex = position === lastElementIndex ? 0 : position + 1;
+        const nextTab = tabs[nextTabIndex];
+
+        event.preventDefault();
+        focusAndSelectTab(nextTab.id);
 
         break;
       }
 
       case "ArrowLeft": {
-        const currentTabIndex = tabs.findIndex((tab) => tab.id === id);
-        const moveTabIndex =
-          currentTabIndex === 0 ? lastElementIndex : currentTabIndex - 1;
-        moveFocus(moveTabIndex);
-        updateActiveTabId(tabs[moveTabIndex].id);
+        const prevTabIndex = position === 0 ? lastElementIndex : position - 1;
+        const prevTab = tabs[prevTabIndex];
+
+        event.preventDefault();
+        focusAndSelectTab(prevTab.id);
 
         break;
       }
@@ -104,11 +152,11 @@ const TabList = ({ activeTabId, tabs, updateActiveTabId }: TabListProps) => {
             isActive={activeTabId == id}
             key={tabId}
             label={label}
-            onClick={() => updateActiveTabId(id)}
-            onKeyDown={(e) => handleKeyDown(e, id)}
+            onClick={() => focusAndSelectTab(id)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
             panelId={panelId}
             ref={(ref) => {
-              tabRefs.current[index] = ref;
+              tabRefs.current.set(id, ref);
             }}
           />
         );
@@ -116,15 +164,6 @@ const TabList = ({ activeTabId, tabs, updateActiveTabId }: TabListProps) => {
     </div>
   );
 };
-
-interface TabItemProps {
-  id: string;
-  isActive: boolean;
-  label: string;
-  panelId: string;
-  onClick: () => void;
-  onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
-}
 
 const TabItem = forwardRef<HTMLButtonElement, TabItemProps>(
   ({ id, label, isActive, onClick, onKeyDown, panelId }: TabItemProps, ref) => {
@@ -145,39 +184,6 @@ const TabItem = forwardRef<HTMLButtonElement, TabItemProps>(
     );
   },
 );
-
-interface TabPanelWrapperProps {
-  activeTabId: string;
-  tabs: Tab[];
-}
-
-const TabPanelWrapper = ({ activeTabId, tabs }: TabPanelWrapperProps) => {
-  return (
-    <div className="tabs-panel-wrapper">
-      {tabs.map(({ id, content }) => {
-        const tabId = `${id}-tab`;
-        const panelId = `${id}-panel`;
-
-        return (
-          <TabPanel
-            id={panelId}
-            key={panelId}
-            content={content}
-            isActive={activeTabId === id}
-            tabId={tabId}
-          />
-        );
-      })}
-    </div>
-  );
-};
-
-interface TabPanelProps {
-  id: string;
-  content: string;
-  isActive: boolean;
-  tabId: string;
-}
 
 const TabPanel = ({ id, content, isActive, tabId }: TabPanelProps) => {
   return (
