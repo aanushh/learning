@@ -156,7 +156,7 @@ function ModalApp() {
 export default function ModalWrapperApp() {
   return (
     <div className="App">
-      <h1>Hello CodeSandbox</h1>
+      <h1>Modal</h1>
 
       <ModalContextProvider>
         <ModalApp />
