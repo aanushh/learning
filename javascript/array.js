@@ -75,3 +75,19 @@ const filter = (arr, validator) => {
     return acc;
   }, []);
 };
+
+/**
+ *
+ * @param {Array<*|Array>} arr
+ */
+function rotateArray(arr) {
+  const arrLength = arr.length;
+  const lastItem = arr[arrLength - 1];
+  const newArr = [lastItem];
+
+  for (let i = 0; i < arrLength - 1; i++) {
+    newArr[i + 1] = arr[i];
+  }
+
+  return newArr;
+}
