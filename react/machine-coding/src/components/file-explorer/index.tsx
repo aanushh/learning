@@ -110,8 +110,6 @@ function FileSystemItem({
   const handleOnKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     const key = event.key;
 
-    console.log(event.target);
-
     switch (key) {
       case "ArrowRight": {
         if (hasChildNodes && !isOpen) {

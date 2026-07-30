@@ -57,7 +57,7 @@ function Carousel({
   }, [loop, slidesCount]);
 
   useEffect(() => {
-    if (!autoPlayInterval || paused || slidesCount === 1 || slidesCount === 0) {
+    if (!autoPlayInterval || paused || slidesCount <= 1) {
       return;
     }
 
